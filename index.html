@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduGrade | Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- App Container Wrapper -->
+    <div id="app-container">
+
+        <!-- ================= AUTH SECTION ================= -->
+        <section id="auth-section" class="auth-wrapper">
+            <!-- Login Card -->
+            <div id="login-card" class="glass-card auth-card">
+                <div class="auth-header">
+                    <h1>Welcome Back</h1>
+                    <p>Access your exam dashboard</p>
+                </div>
+
+                <div class="auth-tabs">
+                    <button type="button" class="auth-tab-btn active" id="tab-login-student" onclick="setLoginRole('student')">Student</button>
+                    <button type="button" class="auth-tab-btn" id="tab-login-teacher" onclick="setLoginRole('teacher')">Admin / Teacher</button>
+                </div>
+
+                <form id="login-form">
+                    <input type="hidden" id="login-role" value="student">
+                    
+                    <div class="form-group">
+                        <label for="login-name">Username / Name</label>
+                        <input type="text" id="login-name" class="form-control" placeholder="Enter your registered name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>
+                        Log In
+                    </button>
+                </form>
+
+                <div class="auth-footer">
+                    Don't have an account? <a href="#" onclick="showAuthCard('register')">Register Now</a>
+                </div>
+            </div>
+
+            <!-- Register Card -->
+            <div id="register-card" class="glass-card auth-card hidden">
+                <div class="auth-header">
+                    <h1>Create Account</h1>
+                    <p>Submit registration details for approval</p>
+                </div>
+
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="reg-name">Full Name</label>
+                        <input type="text" id="reg-name" class="form-control" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-phone">Phone Number</label>
+                        <input type="tel" id="reg-phone" class="form-control" placeholder="e.g. +8801700000000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-college">College / Institution</label>
+                        <input type="text" id="reg-college" class="form-control" placeholder="Enter your college name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-address">Address</label>
+                        <input type="text" id="reg-address" class="form-control" placeholder="City, Country" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" class="form-control" placeholder="Create password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-accent" style="width: 100%; margin-top: 10px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
+                        Submit Request
+                    </button>
+                </form>
+
+                <div class="auth-footer">
+                    Already registered? <a href="#" onclick="showAuthCard('login')">Log In</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= DASHBOARD SECTION ================= -->
+        <section id="dashboard-section" class="dashboard-wrapper hidden">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-logo">
+                    <div class="sidebar-logo-icon">EG</div>
+                    <div class="sidebar-logo-text">EduGrade</div>
+                </div>
+
+                <div class="sidebar-user">
+                    <div id="sidebar-role" class="sidebar-user-role">Student</div>
+                    <div id="sidebar-name" class="sidebar-user-name">User Name</div>
+                </div>
+
+                <!-- Teacher Navigation Menu -->
+                <ul id="teacher-menu" class="sidebar-menu hidden">
+                    <li class="sidebar-menu-item active" data-pane="pane-teacher-overview">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" /></svg>
+                            Overview
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item" data-pane="pane-teacher-requests">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
+                            Pending Requests <span id="badge-requests-count" class="badge badge-pending hidden">0</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item" data-pane="pane-teacher-students">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                            Student List
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item" data-pane="pane-teacher-notices">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" /></svg>
+                            Notices
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item" data-pane="pane-teacher-questions">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                            Exam Questions
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item" data-pane="pane-teacher-grader">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                            Student Scripts
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item" data-pane="pane-teacher-materials">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" /></svg>
+                            Upload Files
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item" data-pane="pane-teacher-analytics">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                            Performance Graph
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Student Navigation Menu -->
+                <ul id="student-menu" class="sidebar-menu hidden">
+                    <li class="sidebar-menu-item active" data-pane="pane-student-overview">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" /></svg>
+                            Overview
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item" data-pane="pane-student-list">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                            Student List
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item" data-pane="pane-student-questions">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                            Exam Questions
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item" data-pane="pane-student-submissions">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                            My Submissions & Marks
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item" data-pane="pane-student-materials">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" /></svg>
+                            Study Materials
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item" data-pane="pane-student-notices">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" /></svg>
+                            Notices
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item" data-pane="pane-student-analytics">
+                        <a>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                            My Performance
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Sidebar Footer Removed: Logout is now at top-right -->
+            </aside>
+
+            <!-- Main Work Panel -->
+            <main class="main-content">
+                <div class="top-bar flex-between">
+                    <div class="flex-row-center" style="gap: 16px;">
+                        <button id="back-btn" class="btn btn-secondary btn-sm hidden" onclick="goBack()" style="padding: 6px 12px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                            Back
+                        </button>
+                        <h2 id="current-pane-title">Overview</h2>
+                    </div>
+                    <div class="flex-row-center" style="gap: 20px;">
+                        <div id="top-bar-date" style="font-size: 0.9rem; color: var(--text-muted);">Wednesday, June 3</div>
+                        <button class="btn btn-danger btn-sm" onclick="logout()" style="padding: 6px 12px; font-size: 0.85rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-pane">
+                    
+                    <!-- ============================================== -->
+                    <!-- ============ TEACHER PANES SECTION ============ -->
+                    <!-- ============================================== -->
+
+                    <!-- Pane 1: Teacher Overview -->
+                    <div id="pane-teacher-overview" class="content-pane-view">
+                        <div class="stats-grid">
+                            <div class="glass-card stat-card">
+                                <div class="stat-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                                </div>
+                                <div class="stat-title">Active Students</div>
+                                <div class="stat-value" id="stat-teacher-students">0</div>
+                            </div>
+                            <div class="glass-card stat-card cyan">
+                                <div class="stat-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                                </div>
+                                <div class="stat-title">Pending Approvals</div>
+                                <div class="stat-value" id="stat-teacher-pending">0</div>
+                            </div>
+                            <div class="glass-card stat-card emerald">
+                                <div class="stat-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" /></svg>
+                                </div>
+                                <div class="stat-title">Scripts Submitted</div>
+                                <div class="stat-value" id="stat-teacher-submissions">0</div>
+                            </div>
+                            <div class="glass-card stat-card amber">
+                                <div class="stat-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                </div>
+                                <div class="stat-title">Total Questions</div>
+                                <div class="stat-value" id="stat-teacher-questions">0</div>
+                            </div>
+                        </div>
+
+                        <div class="grid-2col">
+                            <div class="glass-card panel">
+                                <div class="section-header flex-between">
+                                    <div>
+                                        <h3>Recent Student Registrations</h3>
+                                        <p>Students waiting for dashboard access</p>
+                                    </div>
+                                    <button class="btn btn-secondary btn-sm" onclick="switchPane('pane-teacher-requests')">View All</button>
+                                </div>
+                                <div id="teacher-overview-requests-list">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+
+                            <div class="glass-card panel">
+                                <div class="section-header flex-between">
+                                    <div>
+                                        <h3>Latest Script Submissions</h3>
+                                        <p>Submissions waiting for grades</p>
+                                    </div>
+                                    <button class="btn btn-secondary btn-sm" onclick="switchPane('pane-teacher-grader')">Open Grader</button>
+                                </div>
+                                <div id="teacher-overview-submissions-list">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 2: Student Requests Manager -->
+                    <div id="pane-teacher-requests" class="content-pane-view hidden">
+                        <div class="glass-card panel">
+                            <div class="section-header">
+                                <h3>Pending Student Approvals</h3>
+                                <p>Approve or Reject registration applications to allow portal access</p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="custom-table" id="teacher-requests-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Student Name</th>
+                                            <th>Phone Number</th>
+                                            <th>College / Institution</th>
+                                            <th>Location / Address</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="requests-empty" class="empty-state hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <p>No pending student requests at this time.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 3: Student Directory -->
+                    <div id="pane-teacher-students" class="content-pane-view hidden">
+                        <div class="glass-card panel">
+                            <div class="section-header">
+                                <h3>Registered Students</h3>
+                                <p>Directory of approved student portal accounts</p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="custom-table" id="teacher-students-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Phone Number</th>
+                                            <th>College Name</th>
+                                            <th>Address</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="students-empty" class="empty-state hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                                <p>No students registered in the system yet.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 4: Notices Manager -->
+                    <div id="pane-teacher-notices" class="content-pane-view hidden">
+                        <div class="grid-3col">
+                            <div class="glass-card panel">
+                                <div class="section-header">
+                                    <h3>Publish Notice</h3>
+                                    <p>Announce schedules, events, or test changes</p>
+                                </div>
+                                <form id="publish-notice-form">
+                                    <div class="form-group">
+                                        <label for="notice-input-title">Notice Title</label>
+                                        <input type="text" id="notice-input-title" class="form-control" placeholder="e.g. Midterm Schedule Update" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="notice-input-category">Category / Tag</label>
+                                        <select id="notice-input-category" class="form-control">
+                                            <option value="Exam">Exam</option>
+                                            <option value="Schedule">Schedule</option>
+                                            <option value="Urgent">Urgent</option>
+                                            <option value="General">General</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="notice-input-content">Content Body</label>
+                                        <textarea id="notice-input-content" rows="6" class="form-control" placeholder="Write notice description..." required style="resize: none;"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+                                        Post Announcement
+                                    </button>
+                                </form>
+                            </div>
+
+                            <div class="glass-card panel">
+                                <div class="section-header">
+                                    <h3>All Active Notices</h3>
+                                    <p>Announcements visible to all students</p>
+                                </div>
+                                <div id="teacher-notices-list" class="notice-list">
+                                    <!-- Populated dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 5: Questions Uploader -->
+                    <div id="pane-teacher-questions" class="content-pane-view hidden">
+                        <div class="grid-3col">
+                            <div class="glass-card panel">
+                                <div class="section-header">
+                                    <h3>Add Exam Question</h3>
+                                    <p>Upload a question script for student evaluations</p>
+                                </div>
+                                <form id="upload-question-form">
+                                    <div class="form-group">
+                                        <label for="question-input-title">Exam Title</label>
+                                        <input type="text" id="question-input-title" class="form-control" placeholder="e.g. Term Final Exam" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="question-input-subject">Subject</label>
+                                        <select id="question-input-subject" class="form-control">
+                                            <option value="Mathematics">Mathematics</option>
+                                            <option value="Physics">Physics</option>
+                                            <option value="Chemistry">Chemistry</option>
+                                            <option value="English">English</option>
+                                            <option value="Biology">Biology</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="question-input-desc">Short Instruction</label>
+                                        <input type="text" id="question-input-desc" class="form-control" placeholder="e.g. Answer all questions within 3 hours." required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Question Paper PDF/File</label>
+                                        <div class="file-upload-zone" id="question-upload-zone">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                                            <div class="file-upload-text">Drag & Drop or Click to browse</div>
+                                            <div class="file-upload-subtext">PDF, DOCX, TXT or PNG (Max 5MB)</div>
+                                            <input type="file" id="question-file-input" required>
+                                            <div id="question-file-success" class="file-upload-success-preview hidden">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                                <span id="question-file-name">SelectedFile.pdf</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                                        Publish Question
+                                    </button>
+                                </form>
+                            </div>
+
+                            <div class="glass-card panel">
+                                <div class="section-header">
+                                    <h3>Published Exam Papers</h3>
+                                    <p>Available tests in the portal</p>
+                                </div>
+                                <div class="cards-grid" id="teacher-questions-list">
+                                    <!-- Populated dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 6: Student Scripts Evaluator (Grader) -->
+                    <div id="pane-teacher-grader" class="content-pane-view hidden">
+                        <div class="glass-card panel">
+                            <div class="section-header">
+                                <h3>Script Grading Dashboard</h3>
+                                <p>Evaluate answer scripts submitted by students, enter marks, and add comments</p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="custom-table" id="teacher-grader-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Student</th>
+                                            <th>Exam Subject</th>
+                                            <th>Question Title</th>
+                                            <th>Submission Date</th>
+                                            <th>Status</th>
+                                            <th>Marks</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Dynamic entries -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="grader-empty" class="empty-state hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" /></svg>
+                                <p>No student exam script submissions received yet.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 7: Upload Materials -->
+                    <div id="pane-teacher-materials" class="content-pane-view hidden">
+                        <div class="grid-3col">
+                            <div class="glass-card panel">
+                                <div class="section-header">
+                                    <h3>Upload Study Guide</h3>
+                                    <p>Share lectures, notes, or reference materials with students</p>
+                                </div>
+                                <form id="upload-material-form">
+                                    <div class="form-group">
+                                        <label for="material-input-title">Material Name</label>
+                                        <input type="text" id="material-input-title" class="form-control" placeholder="e.g. Chapter 4 Lecture Notes" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="material-input-subject">Subject</label>
+                                        <select id="material-input-subject" class="form-control">
+                                            <option value="Mathematics">Mathematics</option>
+                                            <option value="Physics">Physics</option>
+                                            <option value="Chemistry">Chemistry</option>
+                                            <option value="English">English</option>
+                                            <option value="Biology">Biology</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="material-input-desc">Reference / Detail Description</label>
+                                        <input type="text" id="material-input-desc" class="form-control" placeholder="e.g. Read before studying homework sheet 2" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Document File</label>
+                                        <div class="file-upload-zone" id="material-upload-zone">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                                            <div class="file-upload-text">Drag & Drop or Click to browse</div>
+                                            <div class="file-upload-subtext">PDF, PPTX, DOCX, TXT or PNG</div>
+                                            <input type="file" id="material-file-input" required>
+                                            <div id="material-file-success" class="file-upload-success-preview hidden">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                                <span id="material-file-name">SelectedFile.pdf</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                                        Publish Study Material
+                                    </button>
+                                </form>
+                            </div>
+
+                            <div class="glass-card panel">
+                                <div class="section-header">
+                                    <h3>Shared Class Files</h3>
+                                    <p>Resources uploaded for the student portal</p>
+                                </div>
+                                <div class="cards-grid" id="teacher-materials-list">
+                                    <!-- Dynamic -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 8: Teacher Analytics (Class Averages) -->
+                    <div id="pane-teacher-analytics" class="content-pane-view hidden">
+                        <div class="glass-card panel">
+                            <div class="section-header flex-between">
+                                <div>
+                                    <h3>Subject Wise Exam Grades</h3>
+                                    <p>Auto-generated analytics displaying performance trends</p>
+                                </div>
+                                <div>
+                                    <select id="teacher-analytics-subject-select" class="form-control" onchange="renderTeacherAnalytics()" style="width: 200px;">
+                                        <option value="All">All Subjects</option>
+                                        <option value="Mathematics">Mathematics</option>
+                                        <option value="Physics">Physics</option>
+                                        <option value="Chemistry">Chemistry</option>
+                                        <option value="English">English</option>
+                                        <option value="Biology">Biology</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <!-- SVG Chart rendered here -->
+                                <svg id="teacher-chart-svg" class="chart-svg"></svg>
+                            </div>
+                            <div class="chart-legend" id="teacher-chart-legend">
+                                <!-- Dynamic -->
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ============================================== -->
+                    <!-- ============ STUDENT PANES SECTION ============ -->
+                    <!-- ============================================== -->
+
+                    <!-- Pane 9: Student Overview -->
+                    <div id="pane-student-overview" class="content-pane-view hidden">
+                        <div class="stats-grid">
+                            <div class="glass-card stat-card">
+                                <div class="stat-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" /></svg>
+                                </div>
+                                <div class="stat-title">Graded Exams</div>
+                                <div class="stat-value" id="stat-student-graded">0</div>
+                            </div>
+                            <div class="glass-card stat-card cyan">
+                                <div class="stat-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                                </div>
+                                <div class="stat-title">Average Marks</div>
+                                <div class="stat-value" id="stat-student-marks">0%</div>
+                            </div>
+                            <div class="glass-card stat-card emerald">
+                                <div class="stat-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                                </div>
+                                <div class="stat-title">Lecture Files</div>
+                                <div class="stat-value" id="stat-student-materials">0</div>
+                            </div>
+                            <div class="glass-card stat-card amber">
+                                <div class="stat-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+                                </div>
+                                <div class="stat-title">Recent Notices</div>
+                                <div class="stat-value" id="stat-student-notices">0</div>
+                            </div>
+                        </div>
+
+                        <div class="grid-2col">
+                            <div class="glass-card panel">
+                                <div class="section-header flex-between">
+                                    <h3>Latest Notices</h3>
+                                    <button class="btn btn-secondary btn-sm" onclick="switchPane('pane-student-notices')">Read Board</button>
+                                </div>
+                                <div id="student-overview-notices" class="notice-list">
+                                    <!-- Rendered dynamically -->
+                                </div>
+                            </div>
+
+                            <div class="glass-card panel">
+                                <div class="section-header flex-between">
+                                    <h3>Upcoming Exams</h3>
+                                    <button class="btn btn-secondary btn-sm" onclick="switchPane('pane-student-questions')">View Questions</button>
+                                </div>
+                                <div id="student-overview-exams" class="notice-list">
+                                    <!-- Rendered dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 10: Student List (Student view) -->
+                    <div id="pane-student-list" class="content-pane-view hidden">
+                        <div class="glass-card panel">
+                            <div class="section-header">
+                                <h3>Student Directory</h3>
+                                <p>Directory of peer students registered in the system</p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="custom-table" id="student-peers-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>College / Institution</th>
+                                            <th>Address</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Dynamic -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 11: Exam Questions (Student view) -->
+                    <div id="pane-student-questions" class="content-pane-view hidden">
+                        <div class="glass-card panel">
+                            <div class="section-header">
+                                <h3>Available Exams & Question Papers</h3>
+                                <p>Click to download exam question sheets or submit answer scripts</p>
+                            </div>
+                            <div class="cards-grid" id="student-questions-list">
+                                <!-- Dynamic -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 12: Submissions & Marks (Student view) -->
+                    <div id="pane-student-submissions" class="content-pane-view hidden">
+                        <div class="glass-card panel">
+                            <div class="section-header">
+                                <h3>My Submitted Answer Scripts</h3>
+                                <p>Review evaluation reports, grades, and teacher notes on your scripts</p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="custom-table" id="student-submissions-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Subject</th>
+                                            <th>Exam Paper Title</th>
+                                            <th>Submitted On</th>
+                                            <th>Evaluation Status</th>
+                                            <th>Grade Marks</th>
+                                            <th>Teacher Comments</th>
+                                            <th>Script Link</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Dynamic -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="student-submissions-empty" class="empty-state hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" /></svg>
+                                <p>You have not submitted any answer scripts yet.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 13: Study Materials (Student view) -->
+                    <div id="pane-student-materials" class="content-pane-view hidden">
+                        <div class="glass-card panel">
+                            <div class="section-header">
+                                <h3>Reference PDFs & Lecture Files</h3>
+                                <p>Lecture reference manuals and resources uploaded by the teacher</p>
+                            </div>
+                            <div class="cards-grid" id="student-materials-list">
+                                <!-- Dynamic -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 14: Notices (Student view) -->
+                    <div id="pane-student-notices" class="content-pane-view hidden">
+                        <div class="glass-card panel">
+                            <div class="section-header">
+                                <h3>Notice Board Announcements</h3>
+                                <p>Official bulletins published by Admin</p>
+                            </div>
+                            <div id="student-notices-board-list" class="notice-list">
+                                <!-- Dynamic -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pane 15: Student Analytics (My Analytics) -->
+                    <div id="pane-student-analytics" class="content-pane-view hidden">
+                        <div class="glass-card panel">
+                            <div class="section-header flex-between">
+                                <div>
+                                    <h3>My Academic Progress graph</h3>
+                                    <p>Dynamic monitoring of exam grades per subject area</p>
+                                </div>
+                                <div>
+                                    <select id="student-analytics-subject-select" class="form-control" onchange="renderStudentAnalytics()" style="width: 200px;">
+                                        <option value="All">All Subjects</option>
+                                        <option value="Mathematics">Mathematics</option>
+                                        <option value="Physics">Physics</option>
+                                        <option value="Chemistry">Chemistry</option>
+                                        <option value="English">English</option>
+                                        <option value="Biology">Biology</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <!-- SVG Chart rendered here -->
+                                <svg id="student-chart-svg" class="chart-svg"></svg>
+                            </div>
+                            <div class="chart-legend" id="student-chart-legend">
+                                <!-- Dynamic -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </section>
+
+    </div>
+
+    <!-- ============================================== -->
+    <!-- =================== MODALS =================== -->
+    <!-- ============================================== -->
+
+    <!-- Modal 1: Grader Evaluation Interface (Admin/Teacher only) -->
+    <div id="grader-modal" class="modal-overlay hidden">
+        <div class="glass-card modal-content large">
+            <div class="modal-header flex-between">
+                <h3>Evaluate Answer Sheet</h3>
+                <button class="modal-close" onclick="closeModal('grader-modal')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="grader-container">
+                    <!-- Left: Answer Sheet View -->
+                    <div>
+                        <h4 style="margin-bottom: 12px; font-weight: 500;">Submitted Script Document</h4>
+                        <div id="grader-script-display" class="grader-file-pane">
+                            <!-- Populated with Text preview or PDF simulator by JS -->
+                        </div>
+                    </div>
+                    <!-- Right: Form panel -->
+                    <div class="grader-form-pane">
+                        <form id="grader-submit-form">
+                            <input type="hidden" id="grader-submission-id">
+                            
+                            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 20px;">
+                                <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Student</div>
+                                <div id="grader-student-name" style="font-weight: 600; font-size: 1.1rem; margin-bottom: 12px;">John Doe</div>
+                                
+                                <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Exam</div>
+                                <div id="grader-exam-title" style="font-weight: 500; font-size: 0.95rem;">Mathematics Term Exam</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="grade-input-marks">Marks Awarded (Out of 100)</label>
+                                <input type="number" id="grade-input-marks" class="form-control" min="0" max="100" placeholder="e.g. 85" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="grade-input-comments">Feedback & Evaluation Comments</label>
+                                <textarea id="grade-input-comments" rows="6" class="form-control" placeholder="Provide notes on the performance..." required style="resize: none;"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-success" style="width: 100%;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                Save Score & Comments
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Submit Script Portal (Student only) -->
+    <div id="submit-script-modal" class="modal-overlay hidden">
+        <div class="glass-card modal-content">
+            <div class="modal-header flex-between">
+                <h3>Submit Answer Script</h3>
+                <button class="modal-close" onclick="closeModal('submit-script-modal')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <form id="student-submit-script-form">
+                <div class="modal-body">
+                    <input type="hidden" id="submit-question-id">
+                    
+                    <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 20px;">
+                        <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Submitting Script for:</div>
+                        <div id="submit-modal-exam-title" style="font-weight: 600; font-size: 1.1rem; color: var(--secondary);">Mathematics Midterm</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Script File (PDF, DOCX, TXT or PNG)</label>
+                        <div class="file-upload-zone" id="script-upload-zone">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                            <div class="file-upload-text">Select your answer script</div>
+                            <div class="file-upload-subtext">PDF, TXT, DOCX, PNG or JPG</div>
+                            <input type="file" id="script-file-input" required>
+                            <div id="script-file-success" class="file-upload-success-preview hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                <span id="script-file-name">SelectedFile.pdf</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('submit-script-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                        Upload Submission
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 3: Document Previewer Overlay -->
+    <div id="preview-modal" class="modal-overlay hidden">
+        <div class="glass-card modal-content large">
+            <div class="modal-header flex-between">
+                <h3 id="preview-modal-title">Document Preview</h3>
+                <button class="modal-close" onclick="closeModal('preview-modal')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div class="modal-body" style="height: 500px;" id="preview-modal-body">
+                <!-- Populated dynamically with text content or pdf preview iframe/embed simulation -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('preview-modal')">Close Preview</button>
+                <a id="preview-modal-download-btn" class="btn btn-accent" download="file">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    Download File
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 4: Notice Reader Modal -->
+    <div id="notice-modal" class="modal-overlay hidden">
+        <div class="glass-card modal-content">
+            <div class="modal-header flex-between">
+                <h3 id="notice-modal-title">Announcement Details</h3>
+                <button class="modal-close" onclick="closeModal('notice-modal')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="notice-meta" style="margin-bottom: 16px;">
+                    <span id="notice-modal-category" class="notice-tag">General</span>
+                    <span id="notice-modal-date" style="color: var(--text-muted);">June 3, 2026</span>
+                </div>
+                <div id="notice-modal-content" style="line-height: 1.6; color: var(--text-main); font-size: 1.05rem;">
+                    <!-- Notice body content -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="closeModal('notice-modal')">Acknowledge</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core App JS Script -->
+    <script src="app.js"></script>
+</body>
+</html>
